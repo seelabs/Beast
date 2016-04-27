@@ -45,6 +45,11 @@ else
   lib crypto ;
 }
 
+variant coverage : debug : <cxxflags>"-fprofile-arcs -ftest-coverage"
+                           <linkflags>"-lgcov" ;
+
+variant asan : release : <cxxflags>"-fsanitize=address -fno-omit-frame-pointer"
+                         <linkflags>"-fsanitize=address" ;
 project beast
     : requirements
       <include>.
