@@ -64,7 +64,7 @@ public:
         return std::move(m_);
     }
 
-private:
+//private:
     friend class basic_parser<isRequest, parser>;
 
     void flush()
