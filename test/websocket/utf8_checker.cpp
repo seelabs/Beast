@@ -52,12 +52,12 @@ public:
     {
         detail::utf8_checker utf8;
         std::uint8_t buf[2];
-        for(auto i = 194; i <= 223; ++i)
+        for(std::uint8_t i = 194; i <= 223; ++i)
         {
             // First byte valid range 194-223
             buf[0] = i;
 
-            for (auto j = 128; j <= 191; ++j)
+            for (std::uint8_t j = 128; j <= 191; ++j)
             {
                 // Second byte valid range 128-191
                 buf[1] = j;
@@ -65,14 +65,14 @@ public:
                 expect(utf8.finish());
             }
 
-            for (auto j = 0; j <= 127; ++j)
+            for (std::uint8_t j = 0; j <= 127; ++j)
             {
                 // Second byte invalid range 0-127
                 buf[1] = j;
                 expect(! utf8.write(buf, 2));
             }
 
-            for (auto j = 192; j <= 255; ++j)
+            for (std::uint8_t j = 192; j <= 255; ++j)
             {
                 // Second byte invalid range 192-255
                 buf[1] = j;
@@ -86,19 +86,19 @@ public:
     {
         detail::utf8_checker utf8;
         std::uint8_t buf[3];
-        for (auto i = 224; i <= 239; ++i)
+        for (std::uint8_t i = 224; i <= 239; ++i)
         {
             // First byte valid range 224-239
             buf[0] = i;
 
-            std::int32_t const b = (i == 224 ? 160 : 128);
-            std::int32_t const e = (i == 237 ? 159 : 191);
-            for (auto j = b; j <= e; ++j)
+            std::uint8_t const b = (i == 224 ? 160 : 128);
+            std::uint8_t const e = (i == 237 ? 159 : 191);
+            for (std::uint8_t j = b; j <= e; ++j)
             {
                 // Second byte valid range 128-191 or 160-191 or 128-159
                 buf[1] = j;
 
-                for (auto k = 128; k <= 191; ++k)
+                for (std::uint8_t k = 128; k <= 191; ++k)
                 {
                     // Third byte valid range 128-191
                     buf[2] = k;
@@ -106,14 +106,14 @@ public:
                     expect(utf8.finish());
                 }
 
-                for (auto k = 0; k <= 127; ++k)
+                for (std::uint8_t k = 0; k <= 127; ++k)
                 {
                     // Third byte invalid range 0-127
                     buf[2] = k;
                     expect(! utf8.write(buf, 3));
                 }
 
-                for (auto k = 192; k <= 255; ++k)
+                for (std::uint8_t k = 192; k <= 255; ++k)
                 {
                     // Third byte invalid range 192-255
                     buf[2] = k;
@@ -121,14 +121,14 @@ public:
                 }
             }
 
-            for (auto j = 0; j < b; ++j)
+            for (std::uint8_t j = 0; j < b; ++j)
             {
                 // Second byte invalid range 0-127 or 0-159
                 buf[1] = j;
                 expect(! utf8.write(buf, 3));
             }
 
-            for (auto j = e + 1; j <= 255; ++j)
+            for (std::uint8_t j = e + 1; j <= 255; ++j)
             {
                 // Second byte invalid range 160-255 or 192-255
                 buf[1] = j;
@@ -142,24 +142,24 @@ public:
     {
         detail::utf8_checker utf8;
         std::uint8_t buf[4];
-        for (auto i = 240; i <= 244; ++i)
+        for (std::uint8_t i = 240; i <= 244; ++i)
         {
             // First byte valid range 240-244
             buf[0] = i;
 
-            std::int32_t const b = (i == 240 ? 144 : 128);
-            std::int32_t const e = (i == 244 ? 143 : 191);
-            for (auto j = b; j <= e; ++j)
+            std::uint8_t const b = (i == 240 ? 144 : 128);
+            std::uint8_t const e = (i == 244 ? 143 : 191);
+            for (std::uint8_t j = b; j <= e; ++j)
             {
                 // Second byte valid range 128-191 or 144-191 or 128-143
                 buf[1] = j;
 
-                for (auto k = 128; k <= 191; ++k)
+                for (std::uint8_t k = 128; k <= 191; ++k)
                 {
                     // Third byte valid range 128-191
                     buf[2] = k;
 
-                    for (auto n = 128; n <= 191; ++n)
+                    for (std::uint8_t n = 128; n <= 191; ++n)
                     {
                         // Fourth byte valid range 128-191
                         buf[3] = n;
@@ -167,14 +167,14 @@ public:
                         expect(utf8.finish());
                     }
 
-                    for (auto n = 0; n <= 127; ++n)
+                    for (std::uint8_t n = 0; n <= 127; ++n)
                     {
                         // Fourth byte invalid range 0-127
                         buf[3] = n;
                         expect(! utf8.write(buf, 4));
                     }
 
-                    for (auto n = 192; n <= 255; ++n)
+                    for (std::uint8_t n = 192; n <= 255; ++n)
                     {
                         // Fourth byte invalid range 192-255
                         buf[3] = n;
@@ -182,14 +182,14 @@ public:
                     }
                 }
 
-                for (auto k = 0; k <= 127; ++k)
+                for (std::uint8_t k = 0; k <= 127; ++k)
                 {
                     // Third byte invalid range 0-127
                     buf[2] = k;
                     expect(! utf8.write(buf, 4));
                 }
 
-                for (auto k = 192; k <= 255; ++k)
+                for (std::uint8_t k = 192; k <= 255; ++k)
                 {
                     // Third byte invalid range 192-255
                     buf[2] = k;
@@ -197,14 +197,14 @@ public:
                 }
             }
 
-            for (auto j = 0; j < b; ++j)
+            for (std::uint8_t j = 0; j < b; ++j)
             {
                 // Second byte invalid range 0-127 or 0-143
                 buf[1] = j;
                 expect(! utf8.write(buf, 3));
             }
 
-            for (auto j = e + 1; j <= 255; ++j)
+            for (std::uint8_t j = e + 1; j <= 255; ++j)
             {
                 // Second byte invalid range 144-255 or 192-255
                 buf[1] = j;
