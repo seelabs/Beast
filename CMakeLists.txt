@@ -6,7 +6,12 @@ project (Beast)
 
 set_property (GLOBAL PROPERTY USE_FOLDERS ON)
 
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
+if (WIN32)
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /wd4100")
+
+else()
+
+endif()
 
 message ("cxx Flags: " ${CMAKE_CXX_FLAGS})
 
