@@ -159,7 +159,7 @@ public:
                 running_ = false;
                 cv_.notify_all();
             }
-            , boost::coroutines::attributes(1024 * 1024));
+            , boost::coroutines::attributes(2 * 1024 * 1024));
 
         std::unique_lock<std::mutex> lock(m_);
         cv_.wait(lock, [&]{ return ! running_; });
