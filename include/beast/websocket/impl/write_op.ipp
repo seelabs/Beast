@@ -36,6 +36,8 @@ class stream<NextLayer>::write_op
         std::size_t remain;
         bool cont;
         int state = 0;
+        bool dstr_ = false;
+        bool mvd_ = false;
 
         template<class DeducedHandler>
         data(DeducedHandler&& h_,
@@ -48,13 +50,32 @@ class stream<NextLayer>::write_op
                 is_continuation(h))
         {
         }
+
+        ~data()
+        {
+            dstr_=true;
+        }
     };
 
     std::shared_ptr<data> d_;
-
+    bool dstr_ = false;
+    bool mvd_ = false;
+    int mv_id_ = 0;
 public:
-    write_op(write_op&&) = default;
+    write_op(write_op&& rhs)
+        :d_(std::move(rhs.d_))
+    {
+        static int zzz=0;
+        ++zzz;
+        rhs.mv_id_ = zzz;
+        rhs.mvd_ = true;
+    }
     write_op(write_op const&) = default;
+
+    ~write_op()
+    {
+        dstr_ = true;
+    }
 
     template<class DeducedHandler, class... Args>
     explicit

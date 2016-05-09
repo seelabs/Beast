@@ -55,6 +55,9 @@ class consuming_buffers
     iter_type begin_;
     std::size_t skip_ = 0;
 
+    int swdid_=0;
+    bool xxx_ = false;
+
     template<class Deduced>
     consuming_buffers(Deduced&& other, std::size_t nbegin)
         : bs_(std::forward<Deduced>(other).bs_)
@@ -95,6 +98,16 @@ public:
     */
     explicit
     consuming_buffers(BufferSequence const& buffers);
+
+    ~consuming_buffers()
+    {
+        static int zzz=0;
+        ++zzz;
+        if (zzz==512)
+            xxx_=true;
+        swdid_=zzz;
+        xxx_=true;
+    }
 
     /// Get a bidirectional iterator to the first element.
     const_iterator

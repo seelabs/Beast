@@ -16,6 +16,9 @@
 #include <type_traits>
 #include <utility>
 
+#include <thread>
+#include <chrono>
+
 namespace beast {
 
 template<class BufferSequence, class ValueType>
@@ -159,6 +162,9 @@ consuming_buffers(BufferSequence const& bs)
 {
     static_assert(is_BufferSequence<BufferSequence, ValueType>::value,
         "BufferSequence requirements not met");
+    static int zzz=0;
+    --zzz;
+    swdid_=zzz;
 }
 
 template<class BufferSequence, class ValueType>
@@ -182,6 +188,13 @@ void
 consuming_buffers<BufferSequence, ValueType>::consume(std::size_t n)
 {
     using boost::asio::buffer_size;
+    static int zzz=0;
+    ++zzz;
+    if (zzz==64)
+    {
+        std::this_thread::sleep_for(std::chrono::seconds{1});
+        std::this_thread::sleep_for(std::chrono::seconds{1});
+    }
     for(;n > 0 && begin_ != bs_.end(); ++begin_)
     {
         auto const len =
