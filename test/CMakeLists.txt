@@ -71,10 +71,6 @@ add_executable (bench-tests
     http/parser_bench.cpp
 )
 
-if (NOT WIN32)
-    target_link_libraries(parser-bench ${Boost_LIBRARIES})
-endif()
-
 add_executable (websocket-tests
     ${BEAST_INCLUDES}
     websocket/websocket_async_echo_peer.hpp
