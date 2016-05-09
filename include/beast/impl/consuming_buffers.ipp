@@ -192,8 +192,8 @@ consuming_buffers<BufferSequence, ValueType>::consume(std::size_t n)
     ++zzz;
     if (zzz==64)
     {
-        // std::this_thread::sleep_for(std::chrono::seconds{1});
-        // std::this_thread::sleep_for(std::chrono::seconds{1});
+        std::this_thread::sleep_for(std::chrono::seconds{1});
+        std::this_thread::sleep_for(std::chrono::seconds{1});
     }
     for(;n > 0 && begin_ != bs_.end(); ++begin_)
     {

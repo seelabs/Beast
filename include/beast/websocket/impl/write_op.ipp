@@ -128,9 +128,9 @@ stream<NextLayer>::
 write_op<Buffers, Handler>::
 operator()(error_code ec, bool again)
 {
-    auto keep_alive = d_;
-    auto& d = *keep_alive;
-    // auto& d = *d_;
+    // auto keep_alive = d_;
+    // auto& d = *keep_alive;
+    auto& d = *d_;
     d.cont = d.cont || again;
     while(! ec && d.state != 99)
     {
@@ -144,9 +144,12 @@ operator()(error_code ec, bool again)
             auto const fin = d.remain <= 0;
             if(fin)
                 d.state = 99;
-            d.ws.async_write_frame(fin,
-                prepare_buffers(n, d.cb), std::move(*this));
+            auto const pb = prepare_buffers(n, d.cb);
             d.cb.consume(n);
+            d.ws.async_write_frame(fin, pb, std::move(*this));
+            // d.ws.async_write_frame(fin,
+            //     prepare_buffers(n, d.cb), std::move(*this));
+            // d.cb.consume(n);
             return;
         }
         }
