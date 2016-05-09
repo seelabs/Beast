@@ -128,7 +128,9 @@ stream<NextLayer>::
 write_op<Buffers, Handler>::
 operator()(error_code ec, bool again)
 {
-    auto& d = *d_;
+    auto keep_alive = d_;
+    auto& d = *keep_alive;
+    // auto& d = *d_;
     d.cont = d.cont || again;
     while(! ec && d.state != 99)
     {
