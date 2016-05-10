@@ -111,7 +111,7 @@ template<class Handler>
 void
 stream<NextLayer>::handshake_op<
     Handler>::operator()(error_code ec,
-        std::size_t bytes_transferred, bool again)
+        std::size_t /*bytes_transferred*/, bool again)
 {
     auto& d = *d_;
     d.cont = d.cont || again;

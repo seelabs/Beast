@@ -150,7 +150,7 @@ void
 stream<NextLayer>::
 write_frame_op<Buffers, Handler>::
 operator()(
-    error_code ec, std::size_t bytes_transferred, bool again)
+    error_code ec, std::size_t /*bytes_transferred*/, bool again)
 {
     using boost::asio::buffer_copy;
     using boost::asio::mutable_buffers_1;

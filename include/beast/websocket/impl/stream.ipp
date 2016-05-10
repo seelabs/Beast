@@ -830,7 +830,7 @@ template<class NextLayer>
 http::request_v1<http::empty_body>
 stream<NextLayer>::
 build_request(boost::string_ref const& host,
-    boost::string_ref const& resource, std::string& key)
+    boost::string_ref const& /*resource*/, std::string& key)
 {
     http::request_v1<http::empty_body> req;
     req.url = "/";

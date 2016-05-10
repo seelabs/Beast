@@ -56,15 +56,15 @@ struct prepare_info
 template<bool isRequest, class Body, class Headers>
 inline
 void
-prepare_options(prepare_info& pi,
-    message_v1<isRequest, Body, Headers>& msg)
+prepare_options(prepare_info&,
+    message_v1<isRequest, Body, Headers>&)
 {
 }
 
 template<bool isRequest, class Body, class Headers>
 void
 prepare_option(prepare_info& pi,
-    message_v1<isRequest, Body, Headers>& msg,
+    message_v1<isRequest, Body, Headers>&,
         connection value)
 {
     pi.connection_value = value;
@@ -97,7 +97,7 @@ prepare_content_length(prepare_info& pi,
 template<bool isRequest, class Body, class Headers>
 void
 prepare_content_length(prepare_info& pi,
-    message_v1<isRequest, Body, Headers> const& msg,
+    message_v1<isRequest, Body, Headers> const& /*msg*/,
         std::false_type)
 {
     pi.content_length = boost::none;

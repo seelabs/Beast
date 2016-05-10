@@ -229,7 +229,7 @@ read_fh1(frame_header& fh, Streambuf& sb,
 template<class Streambuf>
 void
 read_fh2(frame_header& fh, Streambuf& sb,
-    role_type role, close_code::value& code)
+    role_type /*role*/, close_code::value& code)
 {
     using boost::asio::buffer;
     using boost::asio::buffer_copy;
@@ -287,7 +287,7 @@ read_fh2(frame_header& fh, Streambuf& sb,
 template<class Buffers>
 void
 read(ping_payload_type& data,
-    Buffers const& bs, close_code::value& code)
+    Buffers const& bs, close_code::value& /*code*/)
 {
     using boost::asio::buffer_copy;
     using boost::asio::buffer_size;

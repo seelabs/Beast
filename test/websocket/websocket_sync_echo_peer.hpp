@@ -36,7 +36,7 @@ private:
     std::thread thread_;
 
 public:
-    sync_echo_peer(bool server, endpoint_type ep)
+    sync_echo_peer(bool /*server*/, endpoint_type ep)
         : sock_(ios_)
         , acceptor_(ios_)
     {

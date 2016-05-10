@@ -64,7 +64,7 @@ public:
         template<class ConstBufferSequence>
         std::size_t
         write_some(
-            ConstBufferSequence const& buffers, error_code& ec)
+            ConstBufferSequence const& buffers, error_code&)
         {
             auto const n = buffer_size(buffers);
             using boost::asio::buffer_size;
@@ -110,7 +110,7 @@ public:
             }
 
             void
-            init(error_code& ec)
+            init(error_code&)
             {
             }
 

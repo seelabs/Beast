@@ -70,7 +70,7 @@ private:
         }
 
         void
-        init(error_code& ec)
+        init(error_code&)
         {
         }
 

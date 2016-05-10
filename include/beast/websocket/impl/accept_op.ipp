@@ -114,7 +114,7 @@ template<class Handler>
 void 
 stream<NextLayer>::accept_op<Handler>::
 operator()(error_code const& ec,
-    std::size_t bytes_transferred, bool again)
+    std::size_t /*bytes_transferred*/, bool again)
 {
     auto& d = *d_;
     d.cont = d.cont || again;

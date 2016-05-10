@@ -795,7 +795,7 @@ private:
 
     bool
     on_request(unsigned method, std::string const& url,
-        int major, int minor, bool keep_alive, bool upgrade,
+        int major, int minor, bool /*keep_alive*/, bool /*upgrade*/,
             std::true_type)
     {
         m_.method = detail::method_to_string(method);
@@ -823,7 +823,7 @@ private:
 
     bool
     on_response(int status, std::string const& reason,
-        int major, int minor, bool keep_alive, bool upgrade,
+        int major, int minor, bool /*keep_alive*/, bool /*upgrade*/,
             std::true_type)
     {
         m_.status = status;

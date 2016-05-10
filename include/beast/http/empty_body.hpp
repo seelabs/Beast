@@ -55,12 +55,12 @@ private:
 
         template<bool isRequest, class Headers>
         explicit
-        writer(message<isRequest, empty_body, Headers> const& m)
+        writer(message<isRequest, empty_body, Headers> const&)
         {
         }
 
         void
-        init(error_code& ec)
+        init(error_code&)
         {
         }
 

@@ -13,7 +13,7 @@ else()
     set(Boost_USE_STATIC_LIBS ON)
     set(Boost_USE_MULTITHREADED ON)
     find_package(Boost REQUIRED COMPONENTS coroutine context thread filesystem program_options system)
-    include_directories(${Boost_INCLUDE_DIRS})
+    include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
     link_directories(${Boost_LIBRARY_DIR})
 
     set(THREADS_PREFER_PTHREAD_FLAG ON)

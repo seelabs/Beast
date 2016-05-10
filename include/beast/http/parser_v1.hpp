@@ -177,13 +177,13 @@ private:
         return 0;
     }
 
-    void on_request(error_code& ec)
+    void on_request(error_code&)
     {
         set(std::integral_constant<
             bool, isRequest>{});
     }
 
-    void on_response(error_code& ec)
+    void on_response(error_code&)
     {
         set(std::integral_constant<
             bool, isRequest>{});

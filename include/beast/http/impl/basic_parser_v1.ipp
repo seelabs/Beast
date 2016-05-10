@@ -112,6 +112,8 @@ write(boost::asio::const_buffer const& buffer, error_code& ec)
             begin = p;
         return false;
     };
+
+    auto us = [](int c){return static_cast<unsigned short>(c);};
     for(;p != end; ++p)
     {
         unsigned char ch = *p;
@@ -215,7 +217,7 @@ write(boost::asio::const_buffer const& buffer, error_code& ec)
         case s_req_major_start:
             if(! is_digit(ch))
                 return err(parse_error::bad_version);
-            http_major_ = ch - '0';
+            http_major_ = us(ch - '0');
             s_ = s_req_major;
             break;
 
@@ -227,7 +229,7 @@ write(boost::asio::const_buffer const& buffer, error_code& ec)
             }
             if(! is_digit(ch))
                 return err(parse_error::bad_version);
-            http_major_ = 10 * http_major_ + ch - '0';
+            http_major_ = us(10 * http_major_ + ch - '0');
             if(http_major_ > 999)
                 return err(parse_error::bad_version);
             break;
@@ -235,7 +237,7 @@ write(boost::asio::const_buffer const& buffer, error_code& ec)
         case s_req_minor_start:
             if(! is_digit(ch))
                 return err(parse_error::bad_version);
-            http_minor_ = ch - '0';
+            http_minor_ = us(ch - '0');
             s_ = s_req_minor;
             break;
 

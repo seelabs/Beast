@@ -528,7 +528,7 @@ public:
         return cbuf_helper<sizeof...(Vn)>(vn...);
     }
 
-    void testClose(endpoint_type const& ep, yield_context do_yield)
+    void testClose(endpoint_type const& ep, yield_context)
     {
         using boost::asio::buffer;
         {

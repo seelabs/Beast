@@ -95,9 +95,9 @@ is_separator(char c)
 /** Returns `true` if `c` is a character. */
 inline
 bool
-is_char(char c)
+is_char(char)
 {
-    return c >= 0 && c <= 127;
+    return true;
 }
 
 template <class FwdIter>

@@ -75,16 +75,17 @@ base64_encode (std::uint8_t const* data,
     ret.reserve (3 + in_len * 8 / 6);
 
     char const* alphabet (base64_alphabet().data());
+    auto uc = [](int c){return static_cast<unsigned char>(c);};
 
     while(in_len--)
     {
         c3[i++] = *(data++);
         if(i == 3)
         {
-            c4[0] = (c3[0] & 0xfc) >> 2;
-            c4[1] = ((c3[0] & 0x03) << 4) + ((c3[1] & 0xf0) >> 4);
-            c4[2] = ((c3[1] & 0x0f) << 2) + ((c3[2] & 0xc0) >> 6);
-            c4[3] = c3[2] & 0x3f;
+            c4[0] = uc((c3[0] & 0xfc) >> 2);
+            c4[1] = uc(((c3[0] & 0x03) << 4) + ((c3[1] & 0xf0) >> 4));
+            c4[2] = uc(((c3[1] & 0x0f) << 2) + ((c3[2] & 0xc0) >> 6));
+            c4[3] = uc(c3[2] & 0x3f);
             for(i = 0; (i < 4); i++)
                 ret += alphabet[c4[i]];
             i = 0;
@@ -96,10 +97,10 @@ base64_encode (std::uint8_t const* data,
         for(j = i; j < 3; j++)
             c3[j] = '\0';
 
-        c4[0] = (c3[0] & 0xfc) >> 2;
-        c4[1] = ((c3[0] & 0x03) << 4) + ((c3[1] & 0xf0) >> 4);
-        c4[2] = ((c3[1] & 0x0f) << 2) + ((c3[2] & 0xc0) >> 6);
-        c4[3] = c3[2] & 0x3f;
+        c4[0] = uc((c3[0] & 0xfc) >> 2);
+        c4[1] = uc(((c3[0] & 0x03) << 4) + ((c3[1] & 0xf0) >> 4));
+        c4[2] = uc(((c3[1] & 0x0f) << 2) + ((c3[2] & 0xc0) >> 6));
+        c4[3] = uc(c3[2] & 0x3f);
 
         for(j = 0; (j < i + 1); j++)
             ret += alphabet[c4[j]];
@@ -124,7 +125,7 @@ template <class = void>
 std::string
 base64_decode(std::string const& data)
 {
-    int in_len = data.size();
+    size_t in_len = data.size();
     unsigned char c3[3], c4[4];
     int i = 0;
     int j = 0;
@@ -133,6 +134,7 @@ base64_decode(std::string const& data)
     std::string ret;
     ret.reserve (in_len * 6 / 8); // ???
 
+    auto uc = [](int c){return static_cast<unsigned char>(c);};
     while(in_len-- && (data[in_] != '=') &&
         is_base64(data[in_]))
     {
@@ -142,9 +144,9 @@ base64_decode(std::string const& data)
                 c4[i] = static_cast<unsigned char>(
                     base64_alphabet().find(c4[i]));
 
-            c3[0] = (c4[0] << 2) + ((c4[1] & 0x30) >> 4);
-            c3[1] = ((c4[1] & 0xf) << 4) + ((c4[2] & 0x3c) >> 2);
-            c3[2] = ((c4[2] & 0x3) << 6) + c4[3];
+            c3[0] = uc((c4[0] << 2) + ((c4[1] & 0x30) >> 4));
+            c3[1] = uc(((c4[1] & 0xf) << 4) + ((c4[2] & 0x3c) >> 2));
+            c3[2] = uc(((c4[2] & 0x3) << 6) + c4[3]);
 
             for(i = 0; (i < 3); i++)
                 ret += c3[i];
@@ -161,9 +163,9 @@ base64_decode(std::string const& data)
             c4[j] = static_cast<unsigned char>(
                 base64_alphabet().find(c4[j]));
 
-        c3[0] = (c4[0] << 2) + ((c4[1] & 0x30) >> 4);
-        c3[1] = ((c4[1] & 0xf) << 4) + ((c4[2] & 0x3c) >> 2);
-        c3[2] = ((c4[2] & 0x3) << 6) + c4[3];
+        c3[0] = uc((c4[0] << 2) + ((c4[1] & 0x30) >> 4));
+        c3[1] = uc(((c4[1] & 0xf) << 4) + ((c4[2] & 0x3c) >> 2));
+        c3[2] = uc(((c4[2] & 0x3) << 6) + c4[3]);
 
         for(j = 0; (j < i - 1); j++)
             ret += c3[j];
