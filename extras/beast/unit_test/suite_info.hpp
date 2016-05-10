@@ -8,6 +8,7 @@
 #ifndef BEAST_UNIT_TEST_SUITE_INFO_HPP
 #define BEAST_UNIT_TEST_SUITE_INFO_HPP
 
+#include <cstring>
 #include <functional>
 #include <string>
 #include <utility>
@@ -30,9 +31,19 @@ private:
     run_type m_run;
 
 public:
-    template <class = void>
-    suite_info (std::string const& name, std::string const& module,
-        std::string const& library, bool manual, run_type run);
+    suite_info(
+            std::string name,
+            std::string module,
+            std::string library,
+            bool manual,
+            run_type run)
+        : name_(std::move(name))
+        , module_(std::move(module))
+        , library_(std::move(library))
+        , m_manual(manual)
+        , m_run(std::move(run))
+    {
+    }
 
     std::string const&
     name() const
@@ -52,21 +63,23 @@ public:
         return library_;
     }
 
-    /** Returns `true` if this suite only runs manually. */
+    /// Returns `true` if this suite only runs manually.
     bool
     manual() const
     {
         return m_manual;
     }
 
-    /** Return the canonical suite name as a string. */
-    template <class = void>
+    /// Return the canonical suite name as a string.
     std::string
-    full_name() const;
+    full_name() const
+    {
+        return library_ + "." + module_ + "." + name_;
+    }
 
-    /** Run a new instance of the associated test suite. */
+    /// Run a new instance of the associated test suite.
     void
-    run (runner& r) const
+    run(runner& r) const
     {
         m_run (r);
     }
@@ -74,39 +87,34 @@ public:
 
 //------------------------------------------------------------------------------
 
-template <class>
-suite_info::suite_info (std::string const& name, std::string const& module,
-        std::string const& library, bool manual, run_type run)
-    : name_ (name)
-    , module_ (module)
-    , library_ (library)
-    , m_manual (manual)
-    , m_run (std::move (run))
-{
-}
-
-template <class>
-std::string
-suite_info::full_name() const
-{
-    return library_ + "." + module_ + "." + name_;
-}
-
 inline
 bool
-operator< (suite_info const& lhs, suite_info const& rhs)
+operator<(suite_info const& lhs, suite_info const& rhs)
 {
-    return lhs.full_name() < rhs.full_name();
+    auto const& ls = lhs.full_name();
+    auto const& rs = rhs.full_name();
+    return std::strcmp(ls.c_str(), rs.c_str()) < 0;
 }
 
-/** Convenience for producing suite_info for a given test type. */
-template <class Suite>
+/// Convenience for producing suite_info for a given test type.
+template<class Suite>
 suite_info
-make_suite_info (std::string const& name, std::string const& module,
-    std::string const& library, bool manual)
+make_suite_info(
+    std::string name,
+    std::string module,
+    std::string library,
+    bool manual)
 {
-    return suite_info(name, module, library, manual,
-        [](runner& r) { return Suite{}(r); });
+    return suite_info(
+        std::move(name),
+        std::move(module),
+        std::move(library),
+        manual,
+        [](runner& r)
+        {
+            Suite{}(r);
+        }
+    );
 }
 
 } // unit_test
