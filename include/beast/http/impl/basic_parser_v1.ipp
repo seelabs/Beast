@@ -249,7 +249,7 @@ write(boost::asio::const_buffer const& buffer, error_code& ec)
             }
             if(! is_digit(ch))
                 return err(parse_error::bad_version);
-            http_minor_ = 10 * http_minor_ + ch - '0';
+            http_minor_ = us(10 * http_minor_ + ch - '0');
             if(http_minor_ > 999)
                 return err(parse_error::bad_version);
             break;
@@ -314,7 +314,7 @@ write(boost::asio::const_buffer const& buffer, error_code& ec)
         case s_res_major_start:
             if(! is_digit(ch))
                 return err(parse_error::bad_version);
-            http_major_ = ch - '0';
+            http_major_ = us(ch - '0');
             s_ = s_res_major;
             break;
 
@@ -326,7 +326,7 @@ write(boost::asio::const_buffer const& buffer, error_code& ec)
             }
             if(! is_digit(ch))
                 return err(parse_error::bad_version);
-            http_major_ = 10 * http_major_ + ch - '0';
+            http_major_ = us(10 * http_major_ + ch - '0');
             if(http_major_ > 999)
                 return err(parse_error::bad_version);
             break;
@@ -334,7 +334,7 @@ write(boost::asio::const_buffer const& buffer, error_code& ec)
         case s_res_minor_start:
             if(! is_digit(ch))
                 return err(parse_error::bad_version);
-            http_minor_ = ch - '0';
+            http_minor_ = us(ch - '0');
             s_ = s_res_minor;
             break;
 
@@ -346,7 +346,7 @@ write(boost::asio::const_buffer const& buffer, error_code& ec)
             }
             if(! is_digit(ch))
                 return err(parse_error::bad_version);
-            http_minor_ = 10 * http_minor_ + ch - '0';
+            http_minor_ = us(10 * http_minor_ + ch - '0');
             if(http_minor_ > 999)
                 return err(parse_error::bad_version);
             break;
@@ -358,7 +358,7 @@ write(boost::asio::const_buffer const& buffer, error_code& ec)
                     break;
                 return err(parse_error::bad_status_code);
             }
-            status_code_ = ch - '0';
+            status_code_ = us(ch - '0');
             s_ = s_res_status_code;
             break;
 
@@ -375,7 +375,7 @@ write(boost::asio::const_buffer const& buffer, error_code& ec)
                 }
                 break;
             }
-            status_code_ = status_code_ * 10 + ch - '0';
+            status_code_ = us(status_code_ * 10 + ch - '0');
             if(status_code_ > 999)
                 return err(parse_error::bad_status_code);
             break;
