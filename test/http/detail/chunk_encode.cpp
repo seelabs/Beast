@@ -16,52 +16,27 @@ namespace detail {
 class chunk_encode_test : public beast::unit_test::suite
 {
 public:
-    struct final_chunk
-    {
-        std::string s;
-        
-        final_chunk() = default;
-
-        explicit
-        final_chunk(std::string s_)
-            : s(std::move(s_))
-        {
-        }
-    };
-
-    static
-    void
-    encode1(std::string& s, final_chunk const& fc)
-    {
-        using boost::asio::buffer;
-        if(! fc.s.empty())
-            s.append(to_string(
-                chunk_encode(buffer(fc.s.data(), fc.s.size()))));
-        s.append(to_string(chunk_encode_final()));
-    }
-
-    static
-    void
-    encode1(std::string& s, std::string const& piece)
-    {
-        using boost::asio::buffer;
-        s.append(to_string(
-            chunk_encode(buffer(piece.data(), piece.size()))));
-    }
-
     static
     inline
     void
-    encode(std::string&)
+    encode(std::string& s, std::string const& fc)
     {
+        using boost::asio::buffer;
+        if(! fc.empty())
+            s.append(to_string(
+                chunk_encode(buffer(fc.data(), fc.size()))));
+        s.append(to_string(chunk_encode_final()));
     }
 
-    template<class Arg, class... Args>
+    template<class... Args>
     static
     void
-    encode(std::string& s, Arg const& arg, Args const&... args)
+    encode(std::string& s, std::string const& arg, Args const&... args)
     {
-        encode1(s, arg);
+        using boost::asio::buffer;
+        s.append(to_string(
+            chunk_encode(buffer(arg.data(), arg.size()))));
+
         encode(s, args...);
     }
 
@@ -79,19 +54,19 @@ public:
         check(
             "0\r\n\r\n"
             "0\r\n\r\n",
-            "", final_chunk{});
+            "", std::string{});
 
         check(
             "1\r\n"
             "*\r\n"
             "0\r\n\r\n",
-            final_chunk("*"));
+            "*");
 
         check(
             "2\r\n"
             "**\r\n"
             "0\r\n\r\n",
-            final_chunk("**"));
+            "**");
 
         check(
             "1\r\n"
@@ -99,7 +74,7 @@ public:
             "1\r\n"
             "*\r\n"
             "0\r\n\r\n",
-            "*", final_chunk("*"));
+            "*", "*");
 
         check(
             "5\r\n"
@@ -107,7 +82,7 @@ public:
             "7\r\n"
             "*******\r\n"
             "0\r\n\r\n",
-            "*****", final_chunk("*******"));
+            "*****", "*******");
 
         check(
             "1\r\n"
@@ -115,13 +90,13 @@ public:
             "1\r\n"
             "*\r\n"
             "0\r\n\r\n",
-            "*", "*", final_chunk{});
+            "*", "*", std::string{});
 
         check(
             "4\r\n"
             "****\r\n"
             "0\r\n\r\n",
-            "****", final_chunk{});
+            "****", std::string{});
     }
 };
 
