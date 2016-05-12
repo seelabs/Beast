@@ -474,14 +474,14 @@ public:
             [](null_parser<true> const&)
             {
             });
-        
+
         parse_ev<true>(
             "GET / HTTP/1.0\r\n"
             "Content-Length: 1\r\n"
             "Content-Length: 2\r\n"
             "\r\n",
                 parse_error::bad_content_length);
-        
+
         parse_ev<true>(
             "GET / HTTP/1.0\r\n"
             "Transfer-Encoding: chunked\r\n"
@@ -489,7 +489,7 @@ public:
             "fffffffffffffffff\r\n"
             "0\r\n\r\n",
                 parse_error::bad_content_length);
-        
+
         parse_ev<true>("GET / HTTP/1.0\r\nContent-Length: 1e9\r\n\r\n",
             parse_error::bad_content_length);
 

@@ -70,7 +70,7 @@ public:
         This call will block until the coroutine terminates.
 
         Function will be called with this signature:
-        
+
         @code
             void f(yield_context);
         @endcode
