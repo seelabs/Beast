@@ -72,7 +72,7 @@ public:
 
 private:
     void
-    fail(error_code ec, std::string what)
+    fail(error_code ec, std::string const& what)
     {
         if(log_)
             std::cerr <<
@@ -80,7 +80,7 @@ private:
     }
 
     void
-    fail(int id, error_code ec, std::string what)
+    fail(int id, error_code ec, std::string const& what)
     {
         if(log_)
             std::cerr << "#" << std::to_string(id) << " " <<
@@ -88,7 +88,7 @@ private:
     }
 
     void
-    maybe_throw(error_code ec, std::string what)
+    maybe_throw(error_code ec, std::string const& what)
     {
         if(ec)
         {
