@@ -433,11 +433,10 @@ private:
     template<class C>
     class has_on_start_t
     {
-        template<class T, class R =
+        template<class T, class =
             decltype(std::declval<T>().on_start(
-                std::declval<error_code&>()),
-                    std::true_type{})>
-        static R check(int);
+                std::declval<error_code&>()))>
+        static std::true_type check(int); // Current imp fits with others thought. No change needed, just FYI.
         template <class>
         static std::false_type check(...);
         using type = decltype(check<C>(0));

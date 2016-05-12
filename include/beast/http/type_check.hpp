@@ -40,10 +40,9 @@ class is_Parser
     static std::false_type check2(...);
     using type2 = decltype(check2<T>(0));
 
-    template<class U, class R = decltype(
-        std::declval<U>().write_eof(std::declval<error_code&>()),
-            std::true_type{})>
-    static R check3(int);
+    template<class U, class = decltype(
+        std::declval<U>().write_eof(std::declval<error_code&>()))>
+    static std::true_type check3(int);
     template<class>
     static std::false_type check3(...);
     using type3 = decltype(check3<T>(0));
