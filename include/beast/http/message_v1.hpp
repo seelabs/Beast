@@ -38,6 +38,7 @@ struct message_v1 : message<isRequest, Body, Headers>
 
     /// Constructor
     template<class... Args>
+    explicit
     message_v1(Args&&... args)
         : message<isRequest, Body, Headers>(
             std::forward<Args>(args)...)
