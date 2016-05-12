@@ -124,12 +124,12 @@ public:
 
     /** Construct a WebSocket stream.
 
-        This constructor creates a websocket stream and initialises
+        This constructor creates a websocket stream and initializes
         the next layer object.
 
         @throws Any exceptions thrown by the NextLayer constructor.
 
-        @param args The arguments to be passed to initialise the
+        @param args The arguments to be passed to initialize the
         next layer object. The arguments are forwarded to the next
         layer's constructor.
     */
@@ -788,7 +788,7 @@ public:
 
     /** Send a WebSocket close frame.
 
-        This function is used to sycnhronously send a close frame on
+        This function is used to synchronously send a close frame on
         the stream. The call blocks until one of the following is true:
 
         @li The close frame finishes sending.
@@ -817,7 +817,7 @@ public:
 
     /** Send a WebSocket close frame.
 
-        This function is used to sycnhronously send a close frame on
+        This function is used to synchronously send a close frame on
         the stream. The call blocks until one of the following is true:
 
         @li The close frame finishes sending.
@@ -844,7 +844,7 @@ public:
     void
     close(close_reason const& cr, error_code& ec);
 
-    /** Start an asycnhronous operation to send a WebSocket close frame.
+    /** Start an asynchronous operation to send a WebSocket close frame.
 
         This function is used to asynchronously send a close frame on
         the stream. This function call always returns immediately. The
@@ -969,7 +969,7 @@ public:
 
     /** Start an asynchronous operation to read a message from the stream.
 
-        This function is used to asychronously read a message from
+        This function is used to asynchronously read a message from
         the stream. The function call always returns immediately. The
         asynchronous operation will continue until one of the following
         is true:
@@ -1104,7 +1104,7 @@ public:
 
     /** Start an asynchronous operation to read a message frame from the stream.
 
-        This function is used to asychronously read a single message
+        This function is used to asynchronously read a single message
         frame from the websocket. The function call always returns
         immediately. The asynchronous operation will continue until
         one of the following conditions is true:
@@ -1242,7 +1242,7 @@ public:
 
     /** Start an asynchronous operation to write a message to the stream.
 
-        This function is used to asychronously write a message to
+        This function is used to asynchronously write a message to
         the stream. The function call always returns immediately.
         The asynchronous operation will continue until one of the
         following conditions is true:

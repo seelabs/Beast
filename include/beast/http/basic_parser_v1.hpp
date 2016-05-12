@@ -110,7 +110,7 @@ enum values
     @li *1* The parser should skip the body. For example, this is
         used when sending a response to a HEAD request.
 
-    @li *2* The parser should skip ths body, this is an
+    @li *2* The parser should skip the body, this is an
         upgrade to a different protocol.
 
     The parser uses traits to determine if the callback is possible.
@@ -348,7 +348,7 @@ public:
     bool
     keep_alive() const;
 
-    /** Returns `true` if the parse has completed succesfully.
+    /** Returns `true` if the parse has completed successfully.
 
         When the parse has completed successfully, and the semantics
         of the parsed message indicate that the connection is still
