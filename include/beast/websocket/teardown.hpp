@@ -13,7 +13,16 @@
 #include <type_traits>
 
 namespace beast {
+
 namespace websocket {
+
+/** Tag type used to find teardown and async_teardown overloads
+    
+    Overloads of @ref teardown and @async_teardown for user defined
+    types must take a value of type @ref teardown_tag in the first
+    argument in order to be found by the implementation.
+*/
+struct teardown_tag {};
 
 /** Tear down a connection.
 
@@ -30,7 +39,19 @@ namespace websocket {
 */
 template<class Socket>
 void
-teardown(Socket& socket, error_code& ec) = delete;
+teardown(teardown_tag, Socket& socket, error_code& ec)
+{
+/*
+    If you are trying to use OpenSSL and this goes off, you need to
+    add an include for <beast/websocket/ssl.hpp>.
+
+    If you are creating an instance of beast::websocket::stream with your
+    own user defined type, you must provide an overload of teardown with
+    the corresponding signature (including the teardown_tag).
+*/
+    static_assert(sizeof(Socket)==-1,
+        "Unknown Socket type in teardown.");
+};
 
 /** Start tearing down a connection.
 
@@ -56,11 +77,62 @@ teardown(Socket& socket, error_code& ec) = delete;
     manner equivalent to using boost::asio::io_service::post().
 
 */
+/*
+    If you are trying to use OpenSSL and get an error about this function
+    being deleted, you need to include <beast/websocket/ssl.hpp> in the
+    corresponding source file!
+*/
 template<class Socket, class TeardownHandler>
 void
-async_teardown(Socket& socket, TeardownHandler&& handler) = delete;
+async_teardown(teardown_tag, Socket& socket, TeardownHandler&& handler)
+{
+/*
+    If you are trying to use OpenSSL and this goes off, you need to
+    add an include for <beast/websocket/ssl.hpp>.
+
+    If you are creating an instance of beast::websocket::stream with your
+    own user defined type, you must provide an overload of teardown with
+    the corresponding signature (including the teardown_tag).
+*/
+    static_assert(sizeof(Socket)==-1,
+        "Unknown Socket type in async_teardown.");
+}
+
+} // websocket
 
 //------------------------------------------------------------------------------
+
+namespace websocket_helpers {
+
+// Calls to teardown and async_teardown must be made from
+// a namespace that does not contain any overloads of these
+// functions. The websocket_helpers namespace is defined here
+// for that purpose.
+
+template<class Socket>
+inline
+void
+call_teardown(Socket& socket, error_code& ec)
+{
+    using websocket::teardown;
+    teardown(websocket::teardown_tag{}, socket, ec);
+}
+
+template<class Socket, class TeardownHandler>
+inline
+void
+call_async_teardown(Socket& socket, TeardownHandler&& handler)
+{
+    using websocket::async_teardown;
+    async_teardown(websocket::teardown_tag{}, socket,
+        std::forward<TeardownHandler>(handler));
+}
+
+} // websocket_helpers
+
+//------------------------------------------------------------------------------
+
+namespace websocket {
 
 /** Tear down a `boost::asio::ip::tcp::socket`.
 
@@ -76,9 +148,8 @@ async_teardown(Socket& socket, TeardownHandler&& handler) = delete;
     @param ec Set to the error if any occurred.
 */
 void
-teardown(
-    boost::asio::ip::tcp::socket& socket,
-        error_code& ec);
+teardown(teardown_tag,
+    boost::asio::ip::tcp::socket& socket, error_code& ec);
 
 /** Start tearing down a `boost::asio::ip::tcp::socket`.
 
@@ -106,41 +177,10 @@ teardown(
 */
 template<class TeardownHandler>
 void
-async_teardown(
-    boost::asio::ip::tcp::socket& socket,
-        TeardownHandler&& handler);
+async_teardown(teardown_tag,
+    boost::asio::ip::tcp::socket& socket, TeardownHandler&& handler);
 
 } // websocket
-
-//------------------------------------------------------------------------------
-
-namespace websocket_helpers {
-
-// Calls to teardown and async_teardown must be made from
-// a namespace that does not contain any overloads of these
-// functions. The websocket_helpers namespace is defined here
-// for that purpose.
-
-template<class Socket>
-inline
-void
-call_teardown(Socket& socket, error_code& ec)
-{
-    using websocket::teardown;
-    teardown(socket, ec);
-}
-
-template<class Socket, class TeardownHandler>
-inline
-void
-call_async_teardown(Socket& socket, TeardownHandler&& handler)
-{
-    using websocket::async_teardown;
-    async_teardown(socket,
-        std::forward<TeardownHandler>(handler));
-}
-
-} // websocket_helpers
 
 } // beast
 
