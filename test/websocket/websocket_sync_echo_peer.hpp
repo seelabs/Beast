@@ -151,22 +151,22 @@ private:
         }
     };
 
-    template<class Streambuf, std::size_t N>
+    template<class DynamicBuffer, std::size_t N>
     static
     bool
-    match(Streambuf& sb, char const(&s)[N])
+    match(DynamicBuffer& db, char const(&s)[N])
     {
         using boost::asio::buffer;
         using boost::asio::buffer_copy;
-        if(sb.size() < N-1)
+        if(db.size() < N-1)
             return false;
         static_string<N-1> t;
         t.resize(N-1);
         buffer_copy(buffer(t.data(), t.size()),
-            sb.data());
+            db.data());
         if(t != s)
             return false;
-        sb.consume(N-1);
+        db.consume(N-1);
         return true;
     }
 
@@ -188,39 +188,39 @@ private:
         for(;;)
         {
             opcode op;
-            beast::streambuf sb;
-            ws.read(op, sb, ec);
+            beast::streambuf db;
+            ws.read(op, db, ec);
             if(ec)
             {
                 auto const s = ec.message();
                 break;
             }
             ws.set_option(message_type(op));
-            if(match(sb, "RAW"))
+            if(match(db, "RAW"))
             {
                 boost::asio::write(
-                    ws.next_layer(), sb.data(), ec);
+                    ws.next_layer(), db.data(), ec);
             }
-            else if(match(sb, "TEXT"))
+            else if(match(db, "TEXT"))
             {
                 ws.set_option(message_type{opcode::text});
-                ws.write(sb.data(), ec);
+                ws.write(db.data(), ec);
             }
-            else if(match(sb, "PING"))
+            else if(match(db, "PING"))
             {
                 ping_data payload;
-                sb.consume(buffer_copy(
+                db.consume(buffer_copy(
                     buffer(payload.data(), payload.size()),
-                        sb.data()));
+                        db.data()));
                 ws.ping(payload, ec);
             }
-            else if(match(sb, "CLOSE"))
+            else if(match(db, "CLOSE"))
             {
                 ws.close({}, ec);
             }
             else
             {
-                ws.write(sb.data(), ec);
+                ws.write(db.data(), ec);
             }
             if(ec)
                 break;
