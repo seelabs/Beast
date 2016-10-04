@@ -23,10 +23,10 @@ public:
         BEAST_EXPECT(std::string{ec.category().name()} == name);
         BEAST_EXPECT(! ec.message().empty());
         BEAST_EXPECT(std::addressof(ec.category()) ==
-            std::addressof(get_parse_error_category()));
-        BEAST_EXPECT(get_parse_error_category().equivalent(static_cast<int>(ev),
+            std::addressof(detail::get_parse_error_category()));
+        BEAST_EXPECT(detail::get_parse_error_category().equivalent(static_cast<int>(ev),
             ec.category().default_error_condition(static_cast<int>(ev))));
-        BEAST_EXPECT(get_parse_error_category().equivalent(
+        BEAST_EXPECT(detail::get_parse_error_category().equivalent(
             ec, static_cast<int>(ev)));
     }
 
