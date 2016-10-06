@@ -3,50 +3,30 @@
 GroupSources(extras/beast extras)
 GroupSources(include/beast beast)
 
-GroupSources(examples "/")
+GroupSources(examples/ssl "/")
 
-add_executable (http-crawl
+include_directories(${OPENSSL_INCLUDE_DIR})
+
+add_executable (http-ssl-example
     ${BEAST_INCLUDES}
     ${EXTRAS_INCLUDES}
-    urls_large_data.hpp
-    urls_large_data.cpp
-    http_crawl.cpp
+    http_ssl_example.cpp
 )
 
+target_link_libraries(http-ssl-example ${OPENSSL_LIBRARIES})
+
 if (NOT WIN32)
-    target_link_libraries(http-crawl ${Boost_LIBRARIES} Threads::Threads)
+    target_link_libraries(http-ssl-example ${Boost_LIBRARIES} Threads::Threads)
 endif()
 
-add_executable (http-server
+add_executable (websocket-ssl-example
     ${BEAST_INCLUDES}
     ${EXTRAS_INCLUDES}
-    file_body.hpp
-    mime_type.hpp
-    http_async_server.hpp
-    http_sync_server.hpp
-    http_server.cpp
+    websocket_ssl_example.cpp
 )
 
-if (NOT WIN32)
-    target_link_libraries(http-server ${Boost_LIBRARIES} Threads::Threads)
-endif()
-
-add_executable (http-example
-    ${BEAST_INCLUDES}
-    ${EXTRAS_INCLUDES}
-    http_example.cpp
-)
+target_link_libraries(websocket-ssl-example ${OPENSSL_LIBRARIES})
 
 if (NOT WIN32)
-    target_link_libraries(http-example ${Boost_LIBRARIES} Threads::Threads)
-endif()
-
-add_executable (websocket-example
-    ${BEAST_INCLUDES}
-    ${EXTRAS_INCLUDES}
-    websocket_example.cpp
-)
-
-if (NOT WIN32)
-    target_link_libraries(websocket-example ${Boost_LIBRARIES} Threads::Threads)
+    target_link_libraries(websocket-ssl-example ${Boost_LIBRARIES} Threads::Threads)
 endif()
