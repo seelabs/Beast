@@ -389,7 +389,7 @@ protected:
     ct_data dyn_ltree_[
         HEAP_SIZE];                 // literal and length tree
     ct_data dyn_dtree_[
-        2*dCodes+1];        // distance tree */
+        2*dCodes+1];        // distance tree
     ct_data bl_tree_[
         2*blCodes+1];       // Huffman tree for bit lengths
 
@@ -2101,10 +2101,6 @@ tr_flush_block(
     }
     else
     {
-        // VFALCO This assertion fails even in the original ZLib
-    #if 0
-        BOOST_ASSERT(buf);
-    #endif
         opt_lenb = static_lenb = stored_len + 5; // force a stored block
     }
 

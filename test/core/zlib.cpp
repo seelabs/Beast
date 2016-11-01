@@ -99,6 +99,7 @@ public:
             "{{{{{{{{{{}}}}}}}}}}  ");
         while(n < size)
         {
+            // Use a uniform distribution, not mode. Mod can be biased and uniform distribution is easy to use
             *p++ = chars[rng()%chars.size()];
             ++n;
         }

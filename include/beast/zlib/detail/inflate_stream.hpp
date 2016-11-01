@@ -494,14 +494,9 @@ doWrite(z_params& zs, Flush flush, error_code& ec)
                     }
                     if(have_ + copy > nlen_ + ndist_)
                         return err(error::invalid_bit_length_repeat);
-#if 0
-                    while(copy--)
-                        lens_[have_++] = len;
-#else
                     std::fill(&lens_[have_], &lens_[have_ + copy], len);
                     have_ += copy;
                     copy = 0;
-#endif
                 }
             }
             // handle error breaks in while
@@ -680,6 +675,7 @@ doWrite(z_params& zs, Flush flush, error_code& ec)
                 auto in = r.out.next - offset_;
                 auto n = clamp(length_, r.out.avail());
                 length_ -= n;
+                // Memcpy?
                 while(n--)
                     *r.out.next++ = *in++;
             }
@@ -1037,7 +1033,7 @@ inflate_table(
        maximum code length that was allowed to get this far is one bit) */
     if (huff != 0)
     {
-        here.op = 64;   // invalid code marker */
+        here.op = 64;   // invalid code marker
         here.bits = (std::uint8_t)(len - drop);
         here.val = 0;
         next[huff] = here;
@@ -1121,7 +1117,7 @@ fixedTables()
    literal and match bytes until either not enough input or output is
    available, an end-of-block is encountered, or a data error is encountered.
    When large enough input and output buffers are supplied to inflate(), for
-   example, a 16K input buffer and a 64K output buffer, done than 95% of the
+   example, a 16K input buffer and a 64K output buffer, more than 95% of the
    inflate execution time is spent in this routine.
 
    Entry assumptions:
@@ -1248,6 +1244,7 @@ inflate_fast(ranges& r, error_code& ec)
                         break;
                     }
                     auto const n = clamp(len, op);
+                    // formatting
 BOOST_ASSERT(n <= r.out.avail());
                     w_.read(r.out.next, op, n);
                     r.out.next += n;
@@ -1255,11 +1252,12 @@ BOOST_ASSERT(n <= r.out.avail());
                 }
                 if(len > 0)
                 {
+                    // We never fill from output?
                     // copy from output
                     auto in = r.out.next - dist;
                     auto n = clamp(len, r.out.avail());
-BOOST_ASSERT(n <= r.out.avail());
                     len -= n;
+                    // Why not memcpy?
                     while(n--)
                         *r.out.next++ = *in++;
                 }
