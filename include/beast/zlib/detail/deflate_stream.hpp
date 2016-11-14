@@ -1268,12 +1268,14 @@ init()
     if(! buf_ || buf_size_ != needed)
     {
         buf_.reset(new std::uint8_t[needed]);
-std::memset(buf_.get(), 0, needed);
+// std::memset(buf_.get(), 0, needed);
         buf_size_ = needed;
     }
 
     window_ = reinterpret_cast<Byte*>(buf_.get());
     prev_   = reinterpret_cast<std::uint16_t*>(buf_.get() + nwindow);
+// std::memset(prev_, 0, nprev);
+prev_[(nprev/2)-1]=0;
     head_   = reinterpret_cast<std::uint16_t*>(buf_.get() + nwindow + nprev);
 
     /*  We overlay pending_buf_ and d_buf_ + l_buf_. This works
